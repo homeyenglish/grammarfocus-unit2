@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit 2: Sports Events - Grammar Master & Assessment</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- ========================================== -->
+  <!-- MODAL / HALAMAN LOGIN AWAL SISWA -->
+  <!-- ========================================== -->
+  <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-md w-full p-6 md:p-8 relative overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-blue-100 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="relative z-10">
+        <div class="w-14 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-2xl shadow-lg mb-4">
+          ⚽
+        </div>
+        <h2 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Selamat Datang!</h2>
+        <p class="text-xs md:text-sm text-slate-500 mt-1 mb-6">
+          Unit 2: Sports Events &bull; Masukkan data diri Anda untuk memulai pembelajaran dan merekam skor asesmen.
+        </p>
+
+        <form id="student-login-form" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+          <div>
+            <label for="student-name" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              Nama Lengkap <span class="text-rose-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="student-name" 
+              required 
+              placeholder="Contoh: Ahmad Rizki" 
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+            />
+          </div>
+
+          <div>
+            <label for="student-class" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              Kelas <span class="text-rose-500">*</span>
+            </label>
+            <select 
+              id="student-class" 
+              required 
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition bg-white"
+            >
+              <option value="" disabled selected>Pilih Kelas</option>
+              <option value="XA">XA</option>
+              <option value="XB">XB</option>
+            </select>
+          </div>
+
+          <!-- Informasi Webhook Google Spreadsheet -->
+          <div class="pt-1">
+            <div class="flex items-center justify-between text-[11px] text-slate-500 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
+              <span class="flex items-center gap-1.5 font-medium text-emerald-800">
+                <i class="fa-solid fa-circle-check text-emerald-600"></i> Terhubung ke Google Spreadsheet Kelas
+              </span>
+              <button type="button" onclick="toggleWebhookSettings()" class="text-blue-600 hover:underline font-semibold text-[10px]">
+                Ubah URL
+              </button>
+            </div>
+            <!-- Input Webhook Tersembunyi (Expandable) -->
+            <div id="webhook-settings-box" class="hidden mt-2 p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
+              <label class="text-[10px] font-bold text-slate-600 uppercase block">URL Webhook Aktif</label>
+              <input 
+                type="url" 
+                id="webhook-url-input" 
+                value="https://script.google.com/macros/s/AKfycbw75nzfaKjmNploqgnbmVCmON1625QnDDqNxqVfJp5aZCw2VsApzi6-qOiXijjuLGyy/exec"
+                class="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-200 focus:ring-1 focus:ring-blue-500 outline-none"
+              />
+              <p class="text-[10px] text-slate-400 leading-tight">
+                Data login & skor asesmen akan otomatis dicatat langsung ke spreadsheet ini.
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-3">
+            <button 
+              type="submit" 
+              class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm rounded-xl shadow-lg hover:shadow-xl transition transform active:scale-[0.99] flex items-center justify-center gap-2"
+            >
+              <span>Mulai Belajar & Kuis</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header & Navigation -->
+  <header class="bg-gradient-to-r from-blue-700 via-indigo-700 to-sky-600 text-white shadow-lg sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center text-xl shadow-inner">
+          ⚽
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg md:text-xl font-bold tracking-tight">Unit 2: Sports Events</h1>
+            <!-- Badge Info Siswa Aktif -->
+            <span id="student-badge" class="hidden text-[11px] font-semibold bg-emerald-500/90 text-white px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+              <i class="fa-solid fa-user-graduate"></i> <span id="badge-name">-</span> (<span id="badge-class">-</span>)
+            </span>
+          </div>
+          <p class="text-xs text-blue-100 font-medium">Interactive Grammar Workshop &bull; Beginner to Intermediate</p>
+        </div>
+      </div>
+      <!-- Mode Tabs & Ganti Akun -->
+      <div class="flex items-center gap-2">
+        <nav class="flex bg-blue-900/40 p-1 rounded-xl backdrop-blur-md">
+          <button id="nav-material" onclick="switchTab('material')" class="px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-blue-700 shadow-sm flex items-center gap-1.5">
+            <i class="fa-solid fa-book-open"></i> Materi Grammar
+          </button>
+          <button id="nav-quiz" onclick="switchTab('quiz')" class="px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 text-white/90 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
+            <i class="fa-solid fa-list-check"></i> Asesmen (20 Soal)
+          </button>
+        </nav>
+        <button onclick="reopenLogin()" title="Ganti Siswa" class="p-2 text-xs bg-blue-800/60 hover:bg-blue-800 text-blue-100 rounded-xl transition">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 py-6 md:py-8 flex-grow w-full">
+    
+    <!-- ========================================== -->
+    <!-- BAGIAN 1: MATERI TATA BAHASA LENGKAP -->
+    <!-- ========================================== -->
+    <div id="section-material" class="space-y-6 md:space-y-8">
+      
+      <!-- Hero Banner -->
+      <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
+        <div class="absolute -right-8 -bottom-8 text-8xl text-slate-100 select-none pointer-events-none">
+          <i class="fa-solid fa-medal"></i>
+        </div>
+        <div class="relative z-10 max-w-3xl">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700 mb-2.5">
+            <i class="fa-solid fa-star"></i> Buku Work in Progress &bull; Chapter 2: Sports Events
+          </span>
+          <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 leading-tight">
+            Grammar Mastery: Recounting Experiences with 5 Senses
+          </h2>
+          <p class="mt-2.5 text-slate-600 leading-relaxed text-sm md:text-base">
+            Saat menyusun *personal recount text* tentang peristiwa olahraga, kita memadukan <strong>Simple Past Tense</strong> (alur kronologis aksi), <strong>Past Continuous Tense</strong> (latar belakang aksi yang sedang terjadi), serta <strong>Sensory Verbs</strong> (pancaindra) untuk membangkitkan suasana nyata kepada pembaca.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Concept Guide Bar -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="bg-blue-50 border border-blue-200/70 p-3.5 rounded-xl">
+          <span class="text-[11px] font-bold text-blue-600 uppercase tracking-wider block">Fokus 1</span>
+          <p class="text-xs sm:text-sm font-bold text-slate-800 mt-0.5">Simple Past</p>
+          <p class="text-[11px] text-slate-500">Verb 2 (Regular/Irregular) & Was/Were</p>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200/70 p-3.5 rounded-xl">
+          <span class="text-[11px] font-bold text-emerald-600 uppercase tracking-wider block">Fokus 2</span>
+          <p class="text-xs sm:text-sm font-bold text-slate-800 mt-0.5">Past Continuous</p>
+          <p class="text-[11px] text-slate-500">Was/Were + V-ing (When / While)</p>
+        </div>
+        <div class="bg-purple-50 border border-purple-200/70 p-3.5 rounded-xl">
+          <span class="text-[11px] font-bold text-purple-600 uppercase tracking-wider block">Fokus 3</span>
+          <p class="text-xs sm:text-sm font-bold text-slate-800 mt-0.5">Sensory Verbs</p>
+          <p class="text-[11px] text-slate-500">Linking Verb + Adjective (5 Indra)</p>
+        </div>
+        <div class="bg-amber-50 border border-amber-200/70 p-3.5 rounded-xl">
+          <span class="text-[11px] font-bold text-amber-600 uppercase tracking-wider block">Fokus 4</span>
+          <p class="text-xs sm:text-sm font-bold text-slate-800 mt-0.5">Time Connectors</p>
+          <p class="text-[11px] text-slate-500">First, then, meanwhile, suddenly</p>
+        </div>
+      </div>
+
+      <!-- Kartu Modul Tata Bahasa Utama -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+
+        <!-- Modul 1: Simple Past Tense -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 flex flex-col justify-between hover:shadow-md transition">
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base">1</span>
+              <div>
+                <h3 class="text-base md:text-lg font-bold text-slate-900">Simple Past Tense</h3>
+                <p class="text-xs text-slate-500">Peristiwa olahraga yang telah tuntas terjadi</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 text-xs md:text-sm text-slate-700">
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <span class="font-bold text-blue-700 block mb-1">Pola Verbal:</span>
+                <p><strong>(+)</strong> Subject + <strong>Verb 2</strong> (Regular / Irregular) + Object</p>
+                <p><strong>(-)</strong> Subject + <strong>did not (didn't)</strong> + <strong>Verb 1</strong></p>
+                <p><strong>(?)</strong> <strong>Did</strong> + Subject + <strong>Verb 1</strong>?</p>
+              </div>
+
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <span class="font-bold text-blue-700 block mb-1">Pola Nominal (Tanpa Kata Kerja):</span>
+                <p><strong>I / He / She / It / Singular</strong> &rarr; <code class="text-pink-600 font-mono font-bold">was</code></p>
+                <p><strong>You / We / They / Plural</strong> &rarr; <code class="text-pink-600 font-mono font-bold">were</code></p>
+              </div>
+
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Contoh Kalimat Olahraga:</span>
+                <ul class="list-disc list-inside mt-1 text-slate-600 space-y-1 text-xs md:text-sm">
+                  <li><em>We <strong class="text-slate-900">cheered</strong> as the national team scored.</em> (Regular)</li>
+                  <li><em>The striker <strong class="text-slate-900">caught</strong> the loose ball and shot.</em> (Irregular)</li>
+                  <li><em>He <strong class="text-slate-900">didn't miss</strong> a single free-throw.</em> (Bukan: didn't missed)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 bg-amber-50/50 p-2 rounded-lg border border-amber-100">
+            <strong>Kunci Penting:</strong> Setelah kata bantu <em>did</em> atau <em>didn't</em>, kata kerja wajib kembali ke bentuk pertama (*Verb 1 / bare infinitive*).
+          </div>
+        </div>
+
+        <!-- Modul 2: Past Continuous Tense -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 flex flex-col justify-between hover:shadow-md transition">
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-base">2</span>
+              <div>
+                <h3 class="text-base md:text-lg font-bold text-slate-900">Past Continuous Tense</h3>
+                <p class="text-xs text-slate-500">Aksi yang sedang berlangsung di tengah pertandingan</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 text-xs md:text-sm text-slate-700">
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <span class="font-bold text-emerald-700 block mb-1">Rumus Dasar:</span>
+                <p><strong>(+)</strong> Subject + <strong>was/were</strong> + <strong>Verb-ing</strong></p>
+                <p><strong>(-)</strong> Subject + <strong>was/were not (wasn't/weren't)</strong> + <strong>Verb-ing</strong></p>
+                <p><strong>(?)</strong> <strong>Was/Were</strong> + Subject + <strong>Verb-ing</strong>?</p>
+              </div>
+
+              <div class="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100 text-emerald-900">
+                <span class="font-bold block mb-1">Aturan Kombinasi 'When' & 'While':</span>
+                <p class="text-xs leading-relaxed">
+                  &bull; <strong>While + Past Continuous:</strong> Menunjukkan aktivitas berdurasi panjang.<br>
+                  &bull; <strong>When + Simple Past:</strong> Menunjukkan kejadian seketika yang menyela aktivitas panjang tersebut.
+                </p>
+              </div>
+
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Contoh Kalimat Olahraga:</span>
+                <ul class="list-disc list-inside mt-1 text-slate-600 space-y-1 text-xs md:text-sm">
+                  <li><em>Thousands of fans <strong class="text-slate-900">were waving</strong> flags when the anthem played.</em></li>
+                  <li><em>While I <strong class="text-slate-900">was buying</strong> hotdogs, the referee blew the whistle.</em></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 bg-emerald-50/50 p-2 rounded-lg border border-emerald-100">
+            <strong>Catatan:</strong> Jangan gunakan <em>-ing</em> pada kata kerja persepsi statif seperti <em>hear</em> atau <em>see</em> (gunakan <em>I heard</em>, bukan <em>I was hearing</em>).
+          </div>
+        </div>
+
+        <!-- Modul 3: Sensory Verbs (Pancaindra) & Adjectives -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 flex flex-col justify-between hover:shadow-md transition">
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-base">3</span>
+              <div>
+                <h3 class="text-base md:text-lg font-bold text-slate-900">Sensory Verbs & Adjectives</h3>
+                <p class="text-xs text-slate-500">Mendeskripsikan apa yang kita rasakan di arena</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 text-xs md:text-sm text-slate-700">
+              <div class="p-3 bg-purple-50/60 rounded-xl border border-purple-100">
+                <span class="font-bold text-purple-900 block mb-1">Aturan Tata Bahasa Krusial:</span>
+                <p class="text-xs text-slate-700 leading-relaxed">
+                  Dalam menceritakan sensasi, kata kerja indra (<em>taste, feel, sound, smell, look</em>) berfungsi sebagai <strong>linking verb</strong>, sehingga <strong>diikuti oleh Adjective (Kata Sifat)</strong>, bukan Adverb (akhiran -ly).
+                </p>
+                <div class="mt-2 font-mono text-xs text-purple-900 bg-white p-2 rounded border border-purple-200 space-y-1">
+                  <div><i class="fa-solid fa-check text-emerald-600"></i> The arena sounded <strong>deafening</strong>.</div>
+                  <div><i class="fa-solid fa-xmark text-rose-500"></i> The arena sounded <s>deafeningly</s>.</div>
+                  <div><i class="fa-solid fa-check text-emerald-600"></i> The hotdog tasted <strong>savory and delicious</strong>.</div>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Kosakata Sensorik 5 Indra:</span>
+                <div class="grid grid-cols-2 gap-2 mt-1 text-xs">
+                  <span class="bg-slate-100 p-2 rounded">👀 <strong>Sight:</strong> crowded, colorful, vibrant</span>
+                  <span class="bg-slate-100 p-2 rounded">👂 <strong>Hearing:</strong> deafening, thunderous, loud</span>
+                  <span class="bg-slate-100 p-2 rounded">✋ <strong>Touch:</strong> tense, sweaty, scorching hot</span>
+                  <span class="bg-slate-100 p-2 rounded">👅 <strong>Taste/Smell:</strong> savory, smoky, greasy</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500">
+            <strong>Contoh Recount:</strong> <em>"The weather felt scorching, but the supporters looked enthusiastic."</em>
+          </div>
+        </div>
+
+        <!-- Modul 4: Time Markers & Sequence Connectors -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 flex flex-col justify-between hover:shadow-md transition">
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-9 h-9 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-base">4</span>
+              <div>
+                <h3 class="text-base md:text-lg font-bold text-slate-900">Sequence & Time Connectors</h3>
+                <p class="text-xs text-slate-500">Menyusun kronologi alur babak demi babak</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 text-xs md:text-sm text-slate-700">
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <span class="font-bold text-rose-700 block mb-1">Keterangan Waktu (Adverbs of Time):</span>
+                <p class="text-xs text-slate-600">
+                  <em>yesterday, last Saturday, two months ago, during the second half, in the final round.</em>
+                </p>
+              </div>
+
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <span class="font-bold text-rose-700 block mb-1">Penghubung Urutan (Sequence Markers):</span>
+                <p class="text-xs text-slate-600">
+                  <em>First (awal), Then / Next (lanjutan), Suddenly (kejadian mendadak), Meanwhile (bersamaan), In the end / Finally (akhir).</em>
+                </p>
+              </div>
+
+              <div class="p-3 bg-rose-50/50 rounded-xl border border-rose-100 text-xs text-rose-900">
+                <strong>Penerapan Nyata:</strong><br>
+                <em>"<strong>First</strong>, we queued at Gate 3. <strong>Then</strong>, the players entered the pitch. <strong>Meanwhile</strong>, the opposing coach prepared tactics. <strong>Suddenly</strong>, a goal was scored!"</em>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500">
+            <strong>Fungsi:</strong> Menjadikan paragraf recount koheren dan mudah ditelusuri urutan peristiwanya.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- PENGAYAAN 1: KAMUS KATA KERJA OLAHRAGA -->
+      <!-- ========================================== -->
+      <div class="bg-white rounded-2xl p-5 md:p-7 shadow-sm border border-slate-200 space-y-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-table-list"></i>
+          </div>
+          <div>
+            <h3 class="text-base md:text-lg font-bold text-slate-900">Kamus Kata Kerja Olahraga (Regular vs Irregular Verbs)</h3>
+            <p class="text-xs text-slate-500">Daftar kata kerja yang paling sering muncul di Unit 2 Sports Events</p>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs md:text-sm border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                <th class="p-2.5 md:p-3">Verb 1 (Base)</th>
+                <th class="p-2.5 md:p-3">Verb 2 (Past)</th>
+                <th class="p-2.5 md:p-3">Tipe Perubahan</th>
+                <th class="p-2.5 md:p-3">Arti dalam Konteks Olahraga</th>
+                <th class="p-2.5 md:p-3">Contoh Kalimat</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50">
+                <td class="p-2.5 md:p-3 font-semibold text-slate-900">score</td>
+                <td class="p-2.5 md:p-3 font-bold text-blue-700">scored</td>
+                <td class="p-2.5 md:p-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-800">Regular (+d)</span></td>
+                <td class="p-2.5 md:p-3">Mencetak gol/poin</td>
+                <td class="p-2.5 md:p-3 italic">"He scored in the last minute."</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-2.5 md:p-3 font-semibold text-slate-900">cheer</td>
+                <td class="p-2.5 md:p-3 font-bold text-blue-700">cheered</td>
+                <td class="p-2.5 md:p-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-800">Regular (+ed)</span></td>
+                <td class="p-2.5 md:p-3">Bersorak mendukung</td>
+                <td class="p-2.5 md:p-3 italic">"Fans cheered loudly."</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-2.5 md:p-3 font-semibold text-slate-900">blow</td>
+                <td class="p-2.5 md:p-3 font-bold text-amber-700">blew</td>
+                <td class="p-2.5 md:p-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800">Irregular</span></td>
+                <td class="p-2.5 md:p-3">Meniup (peluit wasit)</td>
+                <td class="p-2.5 md:p-3 italic">"The referee blew his whistle."</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-2.5 md:p-3 font-semibold text-slate-900">catch</td>
+                <td class="p-2.5 md:p-3 font-bold text-amber-700">caught</td>
+                <td class="p-2.5 md:p-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800">Irregular</span></td>
+                <td class="p-2.5 md:p-3">Menangkap bola</td>
+                <td class="p-2.5 md:p-3 italic">"The goalie caught the penalty shot."</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-2.5 md:p-3 font-semibold text-slate-900">win</td>
+                <td class="p-2.5 md:p-3 font-bold text-amber-700">won</td>
+                <td class="p-2.5 md:p-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800">Irregular</span></td>
+                <td class="p-2.5 md:p-3">Memenangkan kejuaraan</td>
+                <td class="p-2.5 md:p-3 italic">"They won the trophy yesterday."</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-2.5 md:p-3 font-semibold text-slate-900">lose</td>
+                <td class="p-2.5 md:p-3 font-bold text-amber-700">lost</td>
+                <td class="p-2.5 md:p-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800">Irregular</span></td>
+                <td class="p-2.5 md:p-3">Kalah dalam tanding</td>
+                <td class="p-2.5 md:p-3 italic">"Our favorite team lost 1-2."</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- PENGAYAAN 2: DEEP DIVE SENSORY VS ACTION -->
+      <!-- ========================================== -->
+      <div class="bg-white rounded-2xl p-5 md:p-7 shadow-sm border border-slate-200 space-y-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-eye"></i>
+          </div>
+          <div>
+            <h3 class="text-base md:text-lg font-bold text-slate-900">Deep Dive: Sensory Linking Verbs vs Action Verbs</h3>
+            <p class="text-xs text-slate-500">Kapan kata kerja indra memakai Adjective dan kapan memakai Adverb?</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
+          <div class="p-4 rounded-xl border border-purple-200 bg-purple-50/40 space-y-2">
+            <span class="inline-block px-2 py-0.5 rounded font-bold bg-purple-200 text-purple-800 text-[11px]">1. Sebagai Linking Verb (+ Adjective)</span>
+            <p class="text-slate-700 leading-relaxed">
+              Ketika kata kerja tersebut menggambarkan <em>karakteristik atau keadaan yang dirasakan</em> oleh subjek (bukan tindakan fisik aktif).
+            </p>
+            <div class="bg-white p-2.5 rounded border border-purple-100 font-mono text-purple-900 text-xs">
+              &bull; The stadium <strong>felt hot</strong>.<br>
+              &bull; The music <strong>sounded energetic</strong>.<br>
+              &bull; The drink <strong>tasted sweet</strong>.
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2">
+            <span class="inline-block px-2 py-0.5 rounded font-bold bg-slate-200 text-slate-800 text-[11px]">2. Sebagai Action Verb (+ Adverb)</span>
+            <p class="text-slate-700 leading-relaxed">
+              Ketika subjek secara fisik <em>melakukan tindakan sengaja</em> menggunakan indranya terhadap suatu objek.
+            </p>
+            <div class="bg-white p-2.5 rounded border border-slate-200 font-mono text-slate-800 text-xs">
+              &bull; The referee <strong>looked carefully</strong> at the replay.<br>
+              &bull; The dog <strong>smelled the ball eagerly</strong>.<br>
+              &bull; The athlete <strong>felt the ground gently</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- PENGAYAAN 3: BEDAH TEKS ASLI BUKU (ANDI'S STORY) -->
+      <!-- ========================================== -->
+      <div class="bg-white rounded-2xl p-5 md:p-7 shadow-sm border border-slate-200 space-y-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-highlighter"></i>
+          </div>
+          <div>
+            <h3 class="text-base md:text-lg font-bold text-slate-900">Analisis Tata Bahasa pada Teks Asli Unit 2</h3>
+            <p class="text-xs text-slate-500">Menganalisis teks recount pengalaman Andi di Chapter 2 (Buku Halaman 35)</p>
+          </div>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs md:text-sm text-slate-700 leading-relaxed space-y-2.5 font-serif">
+          <p>
+            <em>
+              "The football match <mark class="bg-blue-100 text-blue-900 px-1 rounded font-sans font-semibold">took place</mark> about 5 years ago... The game continued scoreless up until the half time interval... In the meanwhile, I <mark class="bg-emerald-100 text-emerald-900 px-1 rounded font-sans font-semibold">was getting nervous</mark> in the stadium because my team wasn't playing well... <mark class="bg-rose-100 text-rose-900 px-1 rounded font-sans font-semibold">Then, suddenly,</mark> the ball was passed to the striker, and a goal was scored, leaving supporters completely <mark class="bg-purple-100 text-purple-900 px-1 rounded font-sans font-semibold">ecstatic</mark>!"
+            </em>
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
+          <div class="p-2.5 bg-blue-50 border border-blue-100 rounded-lg">
+            <span class="font-bold text-blue-800 block">took place</span>
+            <span class="text-slate-600">Verb 2 Simple Past (kejadian lampau)</span>
+          </div>
+          <div class="p-2.5 bg-emerald-50 border border-emerald-100 rounded-lg">
+            <span class="font-bold text-emerald-800 block">was getting nervous</span>
+            <span class="text-slate-600">Past Continuous (perasaan saat laga berjalan)</span>
+          </div>
+          <div class="p-2.5 bg-rose-50 border border-rose-100 rounded-lg">
+            <span class="font-bold text-rose-800 block">Then, suddenly</span>
+            <span class="text-slate-600">Sequence Connector (titik balik laga)</span>
+          </div>
+          <div class="p-2.5 bg-purple-50 border border-purple-100 rounded-lg">
+            <span class="font-bold text-purple-800 block">ecstatic</span>
+            <span class="text-slate-600">Adjective (mendeskripsikan rasa gembira penonton)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner Ajak ke Kuis -->
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white text-center shadow-md">
+        <h3 class="text-lg md:text-xl font-bold mb-2">Sudah Memahami Seluruh Materi?</h3>
+        <p class="text-xs md:text-sm text-blue-100 mb-4 max-w-xl mx-auto">
+          Uji pemahaman Anda terhadap konsep <em>Simple Past, Past Continuous, Sensory Verbs</em>, dan <em>Time Connectors</em> di <strong>Asesmen 20 Soal</strong>!
+        </p>
+        <div class="flex justify-center">
+          <button onclick="switchTab('quiz')" class="px-6 py-2.5 bg-white text-blue-700 font-bold text-xs sm:text-sm rounded-xl hover:bg-blue-50 transition shadow">
+            Mulai Kuis Asesmen (20 Soal) &rarr;
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- BAGIAN 2: ASESMEN INTERAKTIF 20 SOAL -->
+    <!-- ========================================== -->
+    <div id="section-quiz" class="hidden space-y-6">
+
+      <!-- Quiz Header & Controller -->
+      <div class="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <span class="inline-block px-2.5 py-0.5 rounded bg-indigo-100 text-indigo-700 text-xs font-bold tracking-wide uppercase mb-1">
+              Diagnostic Test
+            </span>
+            <h2 class="text-lg md:text-xl font-bold text-slate-900">Grammar Assessment: Unit 2 Sports Events</h2>
+            <p class="text-xs text-slate-500">Pilihlah satu jawaban yang paling tepat. Penjelasan akan muncul seketika setelah menjawab.</p>
+          </div>
+          <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+            <div class="text-right">
+              <span class="text-xs text-slate-400 block font-medium">Terjawab</span>
+              <span id="answered-counter" class="text-sm md:text-base font-bold text-blue-600 font-mono">0 / 20</span>
+            </div>
+            <button onclick="resetQuiz()" class="px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg transition flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate-right"></i> Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden mt-4">
+          <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Container Soal -->
+      <div id="questions-container" class="space-y-5">
+        <!-- Soal di-render secara dinamis oleh JavaScript -->
+      </div>
+
+      <!-- Hasil Akhir / Score Card -->
+      <div id="score-card" class="hidden bg-white border border-slate-200 rounded-2xl p-6 md:p-8 text-center shadow-lg transition-all">
+        <div class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-2xl md:text-3xl mb-4 shadow-inner" id="score-icon">
+          <i class="fa-solid fa-award"></i>
+        </div>
+        <h3 class="text-xl md:text-2xl font-extrabold text-slate-900" id="score-headline">Hasil Asesmen Anda</h3>
+        <p class="text-slate-600 text-xs md:text-sm mt-1 mb-5" id="score-subtitle">Berikut ringkasan capaian kompetensi tata bahasa Anda:</p>
+        
+        <div class="inline-flex items-center justify-center gap-6 bg-slate-50 px-6 py-3.5 rounded-2xl border border-slate-200 mb-5">
+          <div class="text-center">
+            <span class="text-[10px] uppercase font-bold text-slate-400">Skor Akhir</span>
+            <div class="text-3xl md:text-4xl font-black text-blue-600 mt-0.5" id="final-score">0</div>
+          </div>
+          <div class="h-10 w-px bg-slate-200"></div>
+          <div class="text-center">
+            <span class="text-[10px] uppercase font-bold text-slate-400">Benar / Total</span>
+            <div class="text-xl md:text-2xl font-bold text-slate-700 mt-1" id="score-ratio">0 / 20</div>
+          </div>
+        </div>
+
+        <!-- Status Pengiriman Google Sheet -->
+        <div id="sync-status" class="mb-5 p-3 rounded-xl text-xs max-w-md mx-auto hidden transition"></div>
+
+        <div id="score-feedback" class="text-xs md:text-sm max-w-lg mx-auto font-medium text-slate-700 mb-6 leading-relaxed">
+          <!-- Umpan balik berdasarkan nilai -->
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-3">
+          <button onclick="scrollToTop()" class="px-4 py-2 bg-slate-800 text-white text-xs font-semibold rounded-xl hover:bg-slate-900 transition">
+            <i class="fa-solid fa-arrow-up mr-1"></i> Tinjau Pembahasan Soal
+          </button>
+          <button onclick="resetQuiz()" class="px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-xl hover:bg-blue-700 transition">
+            <i class="fa-solid fa-rotate-left mr-1"></i> Coba Kuis Lagi
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-5 text-center text-xs text-slate-500">
+    <p>Media Pembelajaran Mandiri Bahasa Inggris SMA/SMK Kelas X &bull; Chapter 2: Sports Events</p>
+    <p class="mt-1">Dibuat khusus untuk penguatan materi Grammar: Simple Past, Past Continuous, & Sensory Descriptions.</p>
+  </footer>
+
+  <!-- SCRIPT LOGIKA KUIS, LOGIN & INTEGRASI GOOGLE SHEET WEBHOOK -->
+  <script>
+    // State Siswa & Webhook
+    let currentUser = {
+      name: "",
+      grade: "",
+      loginTime: null
+    };
+
+    // Webhook Google Apps Script Aktif
+    let defaultWebhookUrl = "https://script.google.com/macros/s/AKfycbw75nzfaKjmNploqgnbmVCmON1625QnDDqNxqVfJp5aZCw2VsApzi6-qOiXijjuLGyy/exec";
+
+    function toggleWebhookSettings() {
+      const box = document.getElementById('webhook-settings-box');
+      box.classList.toggle('hidden');
+    }
+
+    function handleLoginSubmit(event) {
+      event.preventDefault();
+      const nameInput = document.getElementById('student-name').value.trim();
+      const classInput = document.getElementById('student-class').value;
+      const customUrl = document.getElementById('webhook-url-input').value.trim();
+
+      if (!nameInput || !classInput) {
+        return;
+      }
+
+      currentUser.name = nameInput;
+      currentUser.grade = classInput;
+      currentUser.loginTime = new Date().toLocaleString('id-ID');
+
+      if (customUrl) {
+        defaultWebhookUrl = customUrl;
+      }
+
+      // Update badge identitas
+      document.getElementById('badge-name').innerText = currentUser.name;
+      document.getElementById('badge-class').innerText = currentUser.grade;
+      document.getElementById('student-badge').classList.remove('hidden');
+
+      // Sembunyikan Modal Login
+      document.getElementById('login-modal').classList.add('hidden');
+
+      // Kirim event login ke Webhook Google Sheets
+      sendToGoogleSheetWebhook({
+        eventType: "LOGIN",
+        nama: currentUser.name,
+        kelas: currentUser.grade,
+        skor: "-",
+        benar: "-",
+        total: questionsData.length,
+        timestamp: currentUser.loginTime
+      });
+    }
+
+    function reopenLogin() {
+      document.getElementById('login-modal').classList.remove('hidden');
+    }
+
+    // Fungsi Pengiriman Webhook ke Google Spreadsheet (Apps Script Web App)
+    async function sendToGoogleSheetWebhook(payload) {
+      const statusDiv = document.getElementById('sync-status');
+      
+      // Jika webhook URL belum diisi oleh guru, beri notifikasi ramah di panel hasil
+      if (!defaultWebhookUrl) {
+        if (statusDiv && payload.eventType === "SUBMIT_SCORE") {
+          statusDiv.className = "mb-5 p-3 rounded-xl text-xs max-w-md mx-auto bg-amber-50 text-amber-800 border border-amber-200 block";
+          statusDiv.innerHTML = `<i class="fa-solid fa-circle-info mr-1"></i> Data skor tersimpan lokal. Masukkan URL Webhook Google Sheet untuk mencatat rekap nilai kelas secara otomatis.`;
+        }
+        return;
+      }
+
+      try {
+        if (statusDiv && payload.eventType === "SUBMIT_SCORE") {
+          statusDiv.className = "mb-5 p-3 rounded-xl text-xs max-w-md mx-auto bg-blue-50 text-blue-700 border border-blue-200 block";
+          statusDiv.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Mengirimkan nilai ke Google Spreadsheet...`;
+        }
+
+        // Pengiriman via fetch POST ke Apps Script Web App
+        // Menggunakan mode 'no-cors' agar kompatibel dengan redirect standar Apps Script
+        await fetch(defaultWebhookUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (statusDiv && payload.eventType === "SUBMIT_SCORE") {
+          statusDiv.className = "mb-5 p-3 rounded-xl text-xs max-w-md mx-auto bg-emerald-50 text-emerald-800 border border-emerald-200 block";
+          statusDiv.innerHTML = `<i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> Berhasil dikirim ke Google Spreadsheet (${currentUser.name} - ${currentUser.grade})!`;
+        }
+      } catch (err) {
+        if (statusDiv && payload.eventType === "SUBMIT_SCORE") {
+          statusDiv.className = "mb-5 p-3 rounded-xl text-xs max-w-md mx-auto bg-rose-50 text-rose-800 border border-rose-200 block";
+          statusDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Gagal terhubung ke Webhook Google Sheet. Periksa kembali koneksi internet atau URL.`;
+        }
+      }
+    }
+
+    // Tab Navigation
+    function switchTab(tab) {
+      const matSec = document.getElementById('section-material');
+      const quizSec = document.getElementById('section-quiz');
+      const matBtn = document.getElementById('nav-material');
+      const quizBtn = document.getElementById('nav-quiz');
+
+      // Hide all
+      matSec.classList.add('hidden');
+      quizSec.classList.add('hidden');
+
+      // Reset buttons
+      const inactiveBtn = "px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 text-white/90 hover:text-white hover:bg-white/10 flex items-center gap-1.5";
+      const activeBtn = "px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-blue-700 shadow-sm flex items-center gap-1.5";
+
+      matBtn.className = inactiveBtn;
+      quizBtn.className = inactiveBtn;
+
+      if (tab === 'material') {
+        matSec.classList.remove('hidden');
+        matBtn.className = activeBtn;
+      } else {
+        quizSec.classList.remove('hidden');
+        quizBtn.className = activeBtn;
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 20 Soal Tata Bahasa Bertingkat
+    const questionsData = [
+      {
+        id: 1,
+        level: "Beginner",
+        category: "Simple Past (Regular)",
+        prompt: "Yesterday, my brother and I ______ the national basketball tournament at the local stadium.",
+        options: ["watch", "watches", "watched", "watching"],
+        correct: 2,
+        explanation: "Keterangan waktu 'Yesterday' menandakan aktivitas lampau (Simple Past Tense), sehingga kata kerja yang digunakan adalah Verb 2 (watched)."
+      },
+      {
+        id: 2,
+        level: "Beginner",
+        category: "Simple Past (Irregular)",
+        prompt: "We ______ delicious stadium hotdogs while waiting for the match to begin.",
+        options: ["buy", "bought", "buys", "buying"],
+        correct: 1,
+        explanation: "'Buy' adalah kata kerja tidak beraturan (irregular verb). Bentuk lampau (Verb 2) dari 'buy' adalah 'bought'."
+      },
+      {
+        id: 3,
+        level: "Beginner",
+        category: "Simple Past (To Be)",
+        prompt: "The supporters ______ very enthusiastic because their favorite club was leading.",
+        options: ["is", "was", "are", "were"],
+        correct: 3,
+        explanation: "Subjek kalimat adalah jamak ('The supporters') dan peristiwanya terjadi di masa lalu, maka to be yang sesuai adalah 'were'."
+      },
+      {
+        id: 4,
+        level: "Beginner",
+        category: "Simple Past (Negative)",
+        prompt: "Budi ______ attend the badminton competition last Sunday because he was unwell.",
+        options: ["doesn't", "didn't", "don't", "isn't"],
+        correct: 1,
+        explanation: "Bentuk negatif Simple Past untuk kalimat verbal menggunakan auxiliary 'did not' atau disingkat 'didn't'."
+      },
+      {
+        id: 5,
+        level: "Beginner",
+        category: "Simple Past (Interrogative)",
+        prompt: "______ you hear the referee's final whistle at the end of the match?",
+        options: ["Did", "Do", "Does", "Were"],
+        correct: 0,
+        explanation: "Untuk kalimat tanya verbal masa lampau, gunakan auxiliary verb 'Did' di awal kalimat yang diikuti kata kerja dasar (Verb 1: hear)."
+      },
+      {
+        id: 6,
+        level: "Beginner",
+        category: "Sensory Verb + Adjective",
+        prompt: "The roasted sausages sold outside the sports hall tasted ______.",
+        options: ["delicious", "deliciously", "more deliciousness", "with delicious"],
+        correct: 0,
+        explanation: "Sensory verbs seperti 'tasted' berfungsi sebagai linking verb yang harus diikuti oleh kata sifat (adjective: delicious), bukan adverb (deliciously)."
+      },
+      {
+        id: 7,
+        level: "Beginner",
+        category: "Sensory Verb",
+        prompt: "During the decisive penalty shootout, the atmosphere in the arena felt extremely ______.",
+        options: ["tense", "tensely", "tenseness", "more tensely"],
+        correct: 0,
+        explanation: "Kata kerja 'felt' (merasa/terasa) merupakan sensory verb yang berpasangan langsung dengan kata sifat (adjective) yaitu 'tense' (tegang)."
+      },
+      {
+        id: 8,
+        level: "Beginner",
+        category: "Adverbs of Time",
+        prompt: "The two arch-rival football teams clashed against each other five years ______.",
+        options: ["since", "ago", "before", "last"],
+        correct: 1,
+        explanation: "Pola penunjuk durasi waktu yang telah lampau adalah [jangka waktu] + 'ago' (misal: 'five years ago')."
+      },
+      {
+        id: 9,
+        level: "Beginner",
+        category: "Past Continuous (Singular)",
+        prompt: "At 3 PM yesterday, the coach ______ the players in the locker room.",
+        options: ["was instructing", "were instructing", "is instructing", "has instructed"],
+        correct: 0,
+        explanation: "Subjek 'the coach' adalah tunggal (he/she) dan waktu spesifik di masa lalu (At 3 PM yesterday) memerlukan Past Continuous 'was + V-ing'."
+      },
+      {
+        id: 10,
+        level: "Beginner-Intermediate",
+        category: "Past Continuous (Plural)",
+        prompt: "Thousands of spectators ______ flags when the national anthem was played.",
+        options: ["was waving", "were waving", "waved", "are waving"],
+        correct: 1,
+        explanation: "Subjek 'Thousands of spectators' adalah jamak (they), sehingga kata kerja bantu yang tepat adalah 'were waving'."
+      },
+      {
+        id: 11,
+        level: "Intermediate",
+        category: "Past Continuous + When + Simple Past",
+        prompt: "The runners were sprinting toward the finish line when heavy rain suddenly ______.",
+        options: ["starts", "started", "was starting", "has started"],
+        correct: 1,
+        explanation: "Klausa 'when' lazimnya diikuti oleh Simple Past (Verb 2: started) untuk aksi mendadak yang menyela aksi berdurasi sedang berjalan."
+      },
+      {
+        id: 12,
+        level: "Intermediate",
+        category: "While + Past Continuous",
+        prompt: "While we ______ in front of the ticket booth, the gates finally opened.",
+        options: ["waited", "were waiting", "are waiting", "have waited"],
+        correct: 1,
+        explanation: "Klausa setelah penghubung 'while' memakai Past Continuous ('were waiting') untuk menyatakan aksi yang tengah berlangsung di masa lampau."
+      },
+      {
+        id: 13,
+        level: "Intermediate",
+        category: "Sequence Connector",
+        prompt: "______ we entered the stadium, then we found our seats, and finally the match began.",
+        options: ["First", "Suddenly", "Meanwhile", "Previously"],
+        correct: 0,
+        explanation: "Kata sambung urutan kronologis yang digunakan untuk membuka rentetan kejadian adalah 'First' (Pertama-tama)."
+      },
+      {
+        id: 14,
+        level: "Intermediate",
+        category: "Past Simple vs Past Continuous",
+        prompt: "I ______ the excitement of the crowd because I was listening to the commentary on my earphones.",
+        options: ["didn't hear", "wasn't hearing", "don't hear", "am not hearing"],
+        correct: 0,
+        explanation: "Kata kerja persepsi indra statif seperti 'hear' umumnya tidak digunakan dalam bentuk progressive/continuous (-ing); gunakan Simple Past 'didn't hear'."
+      },
+      {
+        id: 15,
+        level: "Intermediate",
+        category: "Adverbs of Manner vs Adjectives",
+        prompt: "Both teams were playing very ______ throughout the second half of the championship.",
+        options: ["aggressive", "aggressively", "aggression", "more aggressive"],
+        correct: 1,
+        explanation: "Kata ini menerangkan kata kerja aksi 'were playing' (bagaimana cara mereka bermain), sehingga membutuhkan Adverb of Manner ('aggressively')."
+      },
+      {
+        id: 16,
+        level: "Intermediate",
+        category: "Sensory Description (Hearing)",
+        prompt: "The cheer from thirty thousand fans in the indoor stadium sounded ______.",
+        options: ["deafening", "deafeningly", "deafen", "with deafening"],
+        correct: 0,
+        explanation: "Sensory verb 'sounded' berpasangan dengan kata sifat (adjective) 'deafening' (memekakkan telinga) untuk mendeskripsikan suara penonton."
+      },
+      {
+        id: 17,
+        level: "Intermediate",
+        category: "Time Connector: Meanwhile",
+        prompt: "Our striker was preparing for the free-kick; ______, the opponent goalkeeper was organizing his defensive wall.",
+        options: ["meanwhile", "sudden", "lastly", "after"],
+        correct: 0,
+        explanation: "'Meanwhile' (sementara itu) menghubungkan dua kejadian yang terjadi secara bersamaan di masa lampau."
+      },
+      {
+        id: 18,
+        level: "Intermediate",
+        category: "Negative Simple Past Structure",
+        prompt: "My friend ______ any souvenirs from the merchandise store because they were sold out.",
+        options: ["did not brought", "did not bring", "was not bring", "not brought"],
+        correct: 1,
+        explanation: "Setelah kata bantu 'did not', kata kerja harus kembali ke bentuk pertama (bare infinitive: 'bring', bukan 'brought')."
+      },
+      {
+        id: 19,
+        level: "Intermediate",
+        category: "Complex Sentence (Past Narrative)",
+        prompt: "As the referee blew the final whistle, the winning players ______ their coach with pure joy.",
+        options: ["embrace", "embraced", "were embraced", "had embracing"],
+        correct: 1,
+        explanation: "Kalimat menceritakan aksi berurutan langsung pada peristiwa lampau, sehingga klausa utama menggunakan Simple Past aktif ('embraced')."
+      },
+      {
+        id: 20,
+        level: "Intermediate",
+        category: "Sensory Smell/Touch Adjective",
+        prompt: "After running under the scorching midday sun, the athletes' jerseys smelled ______ of sweat.",
+        options: ["strong", "strongly", "more strength", "strengthen"],
+        correct: 0,
+        explanation: "'Smelled' bertindak sebagai sensory linking verb yang mendeskripsikan bau pakaian, sehingga diikuti oleh adjective ('smelled strong')."
+      }
+    ];
+
+    // Status Jawaban Siswa
+    const userAnswers = {};
+
+    // Render Pertanyaan
+    function renderQuiz() {
+      const container = document.getElementById('questions-container');
+      container.innerHTML = '';
+
+      questionsData.forEach((q, index) => {
+        const qCard = document.createElement('div');
+        qCard.className = "bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-slate-200 transition";
+        qCard.id = `question-card-${q.id}`;
+
+        let optionsHtml = '';
+        const labels = ['A', 'B', 'C', 'D'];
+        q.options.forEach((opt, optIndex) => {
+          optionsHtml += `
+            <button 
+              type="button" 
+              onclick="selectAnswer(${q.id}, ${optIndex})" 
+              id="opt-${q.id}-${optIndex}" 
+              class="w-full text-left p-3 md:p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition flex items-start gap-3 group text-xs md:text-sm font-medium text-slate-700"
+            >
+              <span class="w-6 h-6 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center text-xs font-bold shrink-0 group-hover:bg-blue-100 group-hover:text-blue-700 transition">
+                ${labels[optIndex]}
+              </span>
+              <span class="leading-relaxed mt-0.5">${opt}</span>
+            </button>
+          `;
+        });
+
+        qCard.innerHTML = `
+          <div class="flex items-center justify-between mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700">No. ${index + 1}</span>
+              <span class="px-2 py-0.5 rounded text-xs font-semibold bg-blue-50 text-blue-700">${q.category}</span>
+            </div>
+            <span class="text-xs font-medium text-slate-400">${q.level}</span>
+          </div>
+
+          <p class="text-sm md:text-base font-semibold text-slate-900 mb-3.5 leading-relaxed">${q.prompt}</p>
+
+          <div class="space-y-2 md:space-y-2.5" id="options-group-${q.id}">
+            ${optionsHtml}
+          </div>
+
+          <!-- Kotak Penjelasan -->
+          <div id="explanation-${q.id}" class="hidden mt-3.5 p-3.5 rounded-xl text-xs md:text-sm leading-relaxed"></div>
+        `;
+
+        container.appendChild(qCard);
+      });
+    }
+
+    // Penilaian Seketika
+    function selectAnswer(questionId, selectedIndex) {
+      if (userAnswers[questionId] !== undefined) {
+        return; // Sudah dijawab
+      }
+
+      userAnswers[questionId] = selectedIndex;
+      const q = questionsData.find(item => item.id === questionId);
+      const isCorrect = selectedIndex === q.correct;
+
+      // Update Tampilan Tombol Pilihan
+      q.options.forEach((_, optIdx) => {
+        const btn = document.getElementById(`opt-${questionId}-${optIdx}`);
+        btn.disabled = true;
+        btn.classList.remove('hover:bg-slate-50', 'group');
+
+        if (optIdx === q.correct) {
+          btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'font-semibold');
+          const badge = btn.querySelector('span:first-child');
+          badge.className = "w-6 h-6 rounded-lg bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shrink-0";
+          badge.innerHTML = '<i class="fa-solid fa-check"></i>';
+        } else if (optIdx === selectedIndex && !isCorrect) {
+          btn.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-900');
+          const badge = btn.querySelector('span:first-child');
+          badge.className = "w-6 h-6 rounded-lg bg-rose-500 text-white flex items-center justify-center text-xs font-bold shrink-0";
+          badge.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        } else {
+          btn.classList.add('opacity-50');
+        }
+      });
+
+      // Tampilkan Pembahasan
+      const expBox = document.getElementById(`explanation-${questionId}`);
+      expBox.classList.remove('hidden');
+      if (isCorrect) {
+        expBox.className = "mt-3.5 p-3.5 rounded-xl text-xs md:text-sm leading-relaxed bg-emerald-50 text-emerald-900 border border-emerald-200";
+        expBox.innerHTML = `
+          <div class="flex items-center gap-1.5 font-bold text-emerald-700 mb-1">
+            <i class="fa-solid fa-circle-check"></i> Jawaban Benar!
+          </div>
+          <div>${q.explanation}</div>
+        `;
+      } else {
+        expBox.className = "mt-3.5 p-3.5 rounded-xl text-xs md:text-sm leading-relaxed bg-rose-50 text-rose-900 border border-rose-200";
+        expBox.innerHTML = `
+          <div class="flex items-center gap-1.5 font-bold text-rose-700 mb-1">
+            <i class="fa-solid fa-circle-xmark"></i> Kurang Tepat!
+          </div>
+          <div>${q.explanation}</div>
+        `;
+      }
+
+      updateProgress();
+    }
+
+    // Perbarui Progress Bar
+    function updateProgress() {
+      const answeredCount = Object.keys(userAnswers).length;
+      document.getElementById('answered-counter').innerText = `${answeredCount} / ${questionsData.length}`;
+      
+      const percent = (answeredCount / questionsData.length) * 100;
+      document.getElementById('progress-bar').style.width = `${percent}%`;
+
+      if (answeredCount === questionsData.length) {
+        showFinalResult();
+      }
+    }
+
+    // Tampilkan Papan Skor Akhir
+    function showFinalResult() {
+      let correctTotal = 0;
+      questionsData.forEach(q => {
+        if (userAnswers[q.id] === q.correct) {
+          correctTotal++;
+        }
+      });
+
+      const score = Math.round((correctTotal / questionsData.length) * 100);
+      const scoreCard = document.getElementById('score-card');
+      scoreCard.classList.remove('hidden');
+
+      document.getElementById('final-score').innerText = score;
+      document.getElementById('score-ratio').innerText = `${correctTotal} / ${questionsData.length}`;
+
+      const feedback = document.getElementById('score-feedback');
+      const headline = document.getElementById('score-headline');
+      const icon = document.getElementById('score-icon');
+
+      if (score >= 85) {
+        headline.innerText = "Luar Biasa! Pemahaman Grammar Sangat Baik";
+        icon.className = "w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl md:text-3xl mb-4";
+        icon.innerHTML = '<i class="fa-solid fa-star"></i>';
+        feedback.innerHTML = `Selamat, <strong>${currentUser.name || 'Siswa'} (${currentUser.grade || '-'})</strong>! Anda telah menguasai aturan <strong>Simple Past, Past Continuous</strong>, dan <strong>Sensory Verbs</strong> dengan sangat baik untuk teks recount olahraga!`;
+      } else if (score >= 65) {
+        headline.innerText = "Bagus! Pemahaman Anda Sudah Cukup Kuat";
+        icon.className = "w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-2xl md:text-3xl mb-4";
+        icon.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>';
+        feedback.innerHTML = `Bagus, <strong>${currentUser.name || 'Siswa'}</strong>! Pemahaman struktur kalimat sudah baik. Silakan periksa kembali bagian perbedaan kata sifat sensorik (<em>adjective</em>) vs kata keterangan (<em>adverb</em>).`;
+      } else {
+        headline.innerText = "Tetap Semangat! Butuh Latihan Tambahan";
+        icon.className = "w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-2xl md:text-3xl mb-4";
+        icon.innerHTML = '<i class="fa-solid fa-book"></i>';
+        feedback.innerHTML = `Tetap semangat, <strong>${currentUser.name || 'Siswa'}</strong>! Jangan ragu membaca kembali tab <strong>Materi Grammar</strong> untuk mengingat pola regular/irregular verbs dan to be lampau.`;
+      }
+
+      // Kirim Hasil Akhir Nilai ke Google Spreadsheet via Webhook
+      sendToGoogleSheetWebhook({
+        eventType: "SUBMIT_SCORE",
+        nama: currentUser.name || "Anonim",
+        kelas: currentUser.grade || "Belum dipilih",
+        skor: score,
+        benar: correctTotal,
+        total: questionsData.length,
+        timestamp: new Date().toLocaleString('id-ID')
+      });
+
+      scoreCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Reset Kuis
+    function resetQuiz() {
+      for (const key in userAnswers) {
+        delete userAnswers[key];
+      }
+      document.getElementById('score-card').classList.add('hidden');
+      document.getElementById('progress-bar').style.width = '0%';
+      document.getElementById('answered-counter').innerText = `0 / ${questionsData.length}`;
+      renderQuiz();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Inisialisasi awal
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuiz();
+    });
+  </script>
+</body>
+</html>
